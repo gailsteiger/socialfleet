@@ -12,6 +12,9 @@ module.exports = {
 
     User.findOne (req.userId, function (err, user) {
 
+      var message = req.body.message;
+      var datetime = req.body.datetime;
+
       var T = new Twit ({
         consumer_key:          config.TWITTER_KEY
         , consumer_secret:     config.TWITTER_SECRET
@@ -19,8 +22,9 @@ module.exports = {
         , access_token_secret: user.twitterSecret
       });
 
-      T.post ('statuses/update', {status: 'hello world!!'}, function (err, data, response) {
+      T.post ('statuses/update', {status: message}, function (err, data, response) {
         console.log (data, err);
+        res.status(200).end();
       });
 
     });
