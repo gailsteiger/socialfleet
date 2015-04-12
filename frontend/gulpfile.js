@@ -14,7 +14,8 @@ var paths = {
 
   index: 'app/index.html',
   appSrc: ['app/**/*', '!app/index.html'],
-  bowerSrc: 'bower_components/**/*'
+  bowerSrc: ['bower_components/**/*', '!bower_components/jquery/dist/jquery.js'],
+  jquerySrc: '!bower_components/jquery/dist/jquery.js'
 };
 
 gulp.task('default', ['watch']);
@@ -38,8 +39,10 @@ gulp.task('serve', ['copyAll'], function() {
 
 gulp.task('copyAll', function() {
   var tempVendors = gulp.src(mainBowerFiles()).pipe(gulp.dest(paths.tempVendor));
-
   var appFiles = gulp.src(paths.appSrc).pipe(gulp.dest(paths.temp));
+
+  // copy jquery. it is specified in index.html to load it first
+  gulp.src(paths.jquerySrc).pipe(gulp.dest(paths.temp));
 
   return gulp.src(paths.index)
     .pipe(gulp.dest(paths.temp))
